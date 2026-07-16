@@ -175,7 +175,7 @@ html[data-theme=light]{
   --map-street:#cdbba1;
   --map-block:#e6d5b8;
   --map-park:rgba(11,147,161,.10);
-  --fog-veil:rgba(250,244,234,.26);
+  --fog-veil:rgba(120,100,78,.32);
   --header-bg:rgba(250,244,234,.8);
   --header-line:rgba(231,219,201,.8);
   --hero-glow:rgba(242,61,123,.14);
@@ -345,7 +345,7 @@ html[data-theme=light] .map-real{
 /* fog of war over the unexplored map */
 .map-fog{
   position:absolute;inset:0;pointer-events:none;
-  -webkit-backdrop-filter:blur(.5px) saturate(.85);backdrop-filter:blur(.5px) saturate(.85);
+  -webkit-backdrop-filter:saturate(.85);backdrop-filter:saturate(.85);
   background:var(--fog-veil);
   -webkit-mask-image:radial-gradient(circle farthest-side at 72% 42%,transparent 0%,transparent 40%,#000 62%);
   mask-image:radial-gradient(circle farthest-side at 72% 42%,transparent 0%,transparent 40%,#000 62%);
@@ -365,17 +365,17 @@ html[data-theme=light] .map-real{
 .poi .poi-hit{fill:transparent}
 .poi:focus-visible .poi-hit{stroke:var(--cyan);stroke-width:1.5}
 .poi-tip{
-  position:absolute;z-index:5;max-width:250px;
+  position:absolute;z-index:5;max-width:250px;min-width:180px;
   background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
-  padding:10px 13px;transform:translate(-50%,-115%);
+  padding:10px 13px;
   box-shadow:0 10px 28px rgba(0,0,0,.35);
-  animation:tipIn .25s ease;
+  animation:tipIn .2s ease;
 }
 .tip-wiki{display:inline-block;margin-top:7px;font-size:12px;font-weight:700;color:var(--cyan);text-decoration:none}
 .tip-wiki:hover{text-decoration:underline}
-.poi-tip.below{transform:translate(-50%,26%);animation-name:tipInB}
-@keyframes tipIn{from{opacity:0;transform:translate(-50%,-115%) translateY(6px)}}
-@keyframes tipInB{from{opacity:0;transform:translate(-50%,26%) translateY(6px)}}
+.poi-tip.below{animation-name:tipInB}
+@keyframes tipIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes tipInB{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .poi-tip b{display:block;font-size:13px;margin-bottom:2px}
 .poi-tip span{font-size:12px;color:var(--muted);line-height:1.4;display:block}
 .pillars{display:grid;gap:16px}
@@ -1020,14 +1020,24 @@ function showPoi(g){
   const d=I18N[LANG];
   poiTip.querySelector("b").textContent=d[g.dataset.tk]||"";
   poiTip.querySelector("span").textContent=d[g.dataset.sk]||"";
-  const r=g.getBoundingClientRect(), m=mapBox.getBoundingClientRect();
-  const x=Math.min(Math.max(r.left-m.left+r.width/2,120),m.width-120);
-  const y=r.top-m.top;
-  poiTip.classList.toggle("below",y<80);
-  poiTip.style.left=x+"px";
-  poiTip.style.top=y+"px";
   poiTip.dataset.cur=g.dataset.tk;
+  // измеряем реальный размер тултипа (текст меняется от карты к карте и по языку),
+  // не показывая — иначе мелькнёт в углу до пересчёта позиции
+  poiTip.style.visibility="hidden";
   poiTip.hidden=false;
+  const tipW=poiTip.offsetWidth, tipH=poiTip.offsetHeight;
+  const r=g.getBoundingClientRect(), m=mapBox.getBoundingClientRect();
+  const gap=10, margin=8;
+  const anchorX=r.left-m.left+r.width/2, anchorY=r.top-m.top+r.height/2;
+  const below=anchorY < tipH+gap+margin; // сверху не хватает места — открываем вниз
+  poiTip.classList.toggle("below",below);
+  let left=anchorX-tipW/2;
+  left=Math.min(Math.max(left,margin),m.width-tipW-margin);
+  let top=below ? anchorY+gap : anchorY-gap-tipH;
+  top=Math.min(Math.max(top,margin),m.height-tipH-margin);
+  poiTip.style.left=left+"px";
+  poiTip.style.top=top+"px";
+  poiTip.style.visibility="";
 }
 let tipTimer;
 const hideTipSoon=()=>{tipTimer=setTimeout(()=>{poiTip.hidden=true;},250);};
