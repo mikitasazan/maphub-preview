@@ -700,7 +700,7 @@ footer .copy{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mu
       <div class="pillar">
         <span class="ic" aria-hidden="true"><svg class="s-pink" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14" opacity=".5"/></svg></span>
         <h3 data-i18n="p1_t">Full map of Leonida</h3>
-        <p data-i18n="p1_d">Every street, beach and swamp — from Vice City to the edge of the map.</p>
+        <p data-i18n="p1_d">Every street, beach and swamp — from downtown to the edge of the map.</p>
       </div>
       <div class="pillar">
         <span class="ic" aria-hidden="true"><svg class="s-cyan" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 5-6"/></svg></span>
@@ -858,7 +858,7 @@ en:{
   map_badge:"Preview · full map at launch",
   map_explored:"EXPLORED 3%",
   poi_wiki:"Wiki page →",
-  p1_t:"Full map of Leonida", p1_d:"Every street, beach and swamp — from Vice City to the edge of the map.",
+  p1_t:"Full map of Leonida", p1_d:"Every street, beach and swamp — from downtown to the edge of the map.",
   p2_t:"100% completion tracker", p2_d:"“Collected 47 of 132.” Check off everything as you play — nothing gets lost.",
   p3_t:"Every secret & easter egg", p3_d:"Found by thousands of players, verified by the team, pinned on the map.",
   f_kicker:"Founders offer", f_title:"Lifetime PRO. Once.",
@@ -909,7 +909,7 @@ ru:{
   map_badge:"Превью · полная карта к релизу",
   map_explored:"РАЗВЕДАНО 3%",
   poi_wiki:"Страница вики →",
-  p1_t:"Полная карта Леониды", p1_d:"Каждая улица, пляж и болото — от Вайс-Сити до края карты.",
+  p1_t:"Полная карта Леониды", p1_d:"Каждая улица, пляж и болото — от центра города до края карты.",
   p2_t:"Трекер прохождения 100%", p2_d:"«Собрано 47 из 132». Отмечай всё по ходу игры — ничего не потеряется.",
   p3_t:"Все секреты и пасхалки", p3_d:"Находят тысячи игроков, проверяет команда, метки — на карте.",
   f_kicker:"Оффер для первых", f_title:"Lifetime PRO. Один раз.",
@@ -966,7 +966,7 @@ document.querySelectorAll(".lang button").forEach(b=>{
   // ponytail: seeded LCG — карта одинаковая при каждой загрузке
   let s=42; const rnd=()=>((s=(s*1103515245+12345)&0x7fffffff)/0x7fffffff);
   const el=(t,a)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);layer.appendChild(n);};
-  // плотная уличная сеть Вайс-Сити
+  // плотная уличная сеть даунтауна
   for(let x=600;x<704;x+=6+rnd()*4) el("path",{d:`M ${x} ${90+rnd()*12} V ${290-rnd()*12}`,"class":"s-street"});
   for(let y=92;y<292;y+=6+rnd()*4) el("path",{d:`M ${596+rnd()*8} ${y} H ${706-rnd()*8}`,"class":"s-street"});
   // кварталы
