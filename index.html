@@ -345,7 +345,7 @@ html[data-theme=light] .map-real{
 /* fog of war over the unexplored map */
 .map-fog{
   position:absolute;inset:0;pointer-events:none;
-  -webkit-backdrop-filter:blur(1.3px) saturate(.75);backdrop-filter:blur(1.3px) saturate(.75);
+  -webkit-backdrop-filter:blur(.5px) saturate(.85);backdrop-filter:blur(.5px) saturate(.85);
   background:var(--fog-veil);
   -webkit-mask-image:radial-gradient(circle farthest-side at 72% 42%,transparent 0%,transparent 40%,#000 62%);
   mask-image:radial-gradient(circle farthest-side at 72% 42%,transparent 0%,transparent 40%,#000 62%);
@@ -1129,8 +1129,17 @@ document.querySelectorAll("form.email-form").forEach(form=>{
     if(form.dataset.founder) track("founder_intent",{step:"submit"});
     const ok=form.nextElementSibling;
     swapForm(form, ok&&ok.classList.contains("form-ok") ? ok : null);
+    markEmailCaptured(form);
   });
 });
+/* email уже оставлен — не переспрашиваем его в остальных формах на странице */
+function markEmailCaptured(fromForm){
+  document.querySelectorAll("form.email-form").forEach(other=>{
+    if(other===fromForm || other.style.display==="none") return;
+    const ok=other.nextElementSibling;
+    if(ok&&ok.classList.contains("form-ok")){ other.style.display="none"; ok.style.display="block"; }
+  });
+}
 
 /* ============ founder modal ============ */
 const modal=document.getElementById("founderModal");
